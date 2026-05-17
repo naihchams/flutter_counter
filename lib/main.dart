@@ -1,3 +1,5 @@
+import 'package:counter_ui_practice/widgets/counter_action_button.dart';
+import 'package:counter_ui_practice/widgets/counter_actions.dart';
 import 'package:counter_ui_practice/widgets/counter_circle.dart';
 import 'package:counter_ui_practice/widgets/counter_header.dart';
 import 'package:counter_ui_practice/widgets/tip_card.dart';
@@ -74,85 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(height: 25),
                 CounterCircle(count: _counter),
                 SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          height: 75,
-                          width: 75,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            color: Color.fromRGBO(230, 223, 249, 1),
-                          ),
-                          child: IconButton(
-                            onPressed: _decrementCounter,
-                            icon: Icon(Icons.remove_rounded),
-                            iconSize: 40,
-                            color: Color.fromRGBO(117, 93, 236, 1),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Decrement',
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 40),
-                    Column(
-                      children: [
-                        Container(
-                          width: 90,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromRGBO(117, 93, 236, 1),
-                          ),
-                          child: IconButton(
-                            onPressed: _incrementCounter,
-                            icon: Icon(Icons.add_rounded),
-                            iconSize: 50,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Increment',
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 40),
-                    Column(
-                      children: [
-                        Container(
-                          height: 75,
-                          width: 75,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            color: Color.fromRGBO(230, 223, 249, 1),
-                          ),
-                          child: Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.rotationY(pi),
-                            child: IconButton(
-                              onPressed: _resetCounter,
-                              icon: Icon(Icons.refresh_rounded),
-                              iconSize: 40,
-                              color: Color.fromRGBO(117, 93, 236, 1),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text('Reset', style: TextStyle(color: Colors.blueGrey)),
-                      ],
-                    ),
-                  ],
+                CounterActions(
+                  decrementFunction: _decrementCounter,
+                  incrementFunction: _incrementCounter,
+                  resetFunction: _resetCounter,
                 ),
                 SizedBox(height: 30),
                 TipCard(),
