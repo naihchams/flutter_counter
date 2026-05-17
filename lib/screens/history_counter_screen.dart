@@ -21,67 +21,67 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
   final List<String> filters = ['All', 'Increment', 'Decrement', 'Reset'];
 
   final List<HistoryItem> allHistoryItems = [
-    HistoryItem(type: 'increment', value: 16, createdAt: DateTime.now()),
-    HistoryItem(
-      type: 'decrement',
-      value: 15,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 2)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 16,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
-    ),
-    HistoryItem(
-      type: 'reset',
-      value: 0,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 9)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 5,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-    ),
-    HistoryItem(
-      type: 'decrement',
-      value: 4,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 5,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
-    ),
-    HistoryItem(
-      type: 'reset',
-      value: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 5)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 20,
-      createdAt: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    HistoryItem(
-      type: 'decrement',
-      value: 19,
-      createdAt: DateTime.now().subtract(const Duration(days: 3, hours: 2)),
-    ),
-    HistoryItem(
-      type: 'reset',
-      value: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 12)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 30,
-      createdAt: DateTime.now().subtract(const Duration(days: 20)),
-    ),
-    HistoryItem(
-      type: 'decrement',
-      value: 29,
-      createdAt: DateTime.now().subtract(const Duration(days: 35)),
-    ),
+    // HistoryItem(type: 'increment', value: 16, createdAt: DateTime.now()),
+    // HistoryItem(
+    //   type: 'decrement',
+    //   value: 15,
+    //   createdAt: DateTime.now().subtract(const Duration(minutes: 2)),
+    // ),
+    // HistoryItem(
+    //   type: 'increment',
+    //   value: 16,
+    //   createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
+    // ),
+    // HistoryItem(
+    //   type: 'reset',
+    //   value: 0,
+    //   createdAt: DateTime.now().subtract(const Duration(minutes: 9)),
+    // ),
+    // HistoryItem(
+    //   type: 'increment',
+    //   value: 5,
+    //   createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+    // ),
+    // HistoryItem(
+    //   type: 'decrement',
+    //   value: 4,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+    // ),
+    // HistoryItem(
+    //   type: 'increment',
+    //   value: 5,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
+    // ),
+    // HistoryItem(
+    //   type: 'reset',
+    //   value: 0,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 5)),
+    // ),
+    // HistoryItem(
+    //   type: 'increment',
+    //   value: 20,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 3)),
+    // ),
+    // HistoryItem(
+    //   type: 'decrement',
+    //   value: 19,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 3, hours: 2)),
+    // ),
+    // HistoryItem(
+    //   type: 'reset',
+    //   value: 0,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 12)),
+    // ),
+    // HistoryItem(
+    //   type: 'increment',
+    //   value: 30,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 20)),
+    // ),
+    // HistoryItem(
+    //   type: 'decrement',
+    //   value: 29,
+    //   createdAt: DateTime.now().subtract(const Duration(days: 35)),
+    // ),
   ];
 
   @override
@@ -176,141 +176,195 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
         ),
       ),
       backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(horizontalPadding),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: height * 0.05,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
+      body: visibleItems.isEmpty
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/emptyHistory.png',
+                        width: width * 0.7,
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      const Text(
+                        'No history yet',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(30, 30, 40, 1),
                         ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.search, color: Colors.grey),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: TextField(
-                                controller: _searchController,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Search history',
-                                  hintStyle: TextStyle(color: Colors.grey),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      const Text(
+                        'Your counter activity will appear here',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(horizontalPadding),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: height * 0.05,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.search, color: Colors.grey),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _searchController,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Search history',
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      onChanged: (text) {
+                                        setState(() {
+                                          searchQuery = text;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          Container(
+                            height: height * 0.05,
+                            width: width * 0.25,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(239, 236, 253, 1),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedFilter,
+                                isExpanded: true,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Color.fromRGBO(110, 91, 217, 1),
                                 ),
-                                onChanged: (text) {
+                                style: const TextStyle(
+                                  color: Color.fromRGBO(110, 91, 217, 1),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                                items: filters.map((filter) {
+                                  return DropdownMenuItem<String>(
+                                    value: filter,
+                                    child: Text(
+                                      filter,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (value == null) return;
+
                                   setState(() {
-                                    searchQuery = text;
+                                    selectedFilter = value;
                                   });
                                 },
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Container(
-                      height: height * 0.05,
-                      width: width * 0.25,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(239, 236, 253, 1),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedFilter,
-                          isExpanded: true,
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Color.fromRGBO(110, 91, 217, 1),
                           ),
-                          style: const TextStyle(
-                            color: Color.fromRGBO(110, 91, 217, 1),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                          items: filters.map((filter) {
-                            return DropdownMenuItem<String>(
-                              value: filter,
-                              child: Text(
-                                filter,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (value == null) return;
-
-                            setState(() {
-                              selectedFilter = value;
-                            });
-                          },
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
 
-                const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                HistoryCardStat(
-                  increments: increments,
-                  decrements: decrements,
-                  resets: resets,
-                  netChange: netChange,
-                ),
+                      HistoryCardStat(
+                        increments: increments,
+                        decrements: decrements,
+                        resets: resets,
+                        netChange: netChange,
+                      ),
 
-                const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                if (todayItems.isNotEmpty) ...[
-                  HistorySection(title: 'Today', items: todayItems),
-                  const SizedBox(height: 28),
-                ],
-                if (yesterdayItems.isNotEmpty) ...[
-                  HistorySection(title: 'Yesterday', items: yesterdayItems),
-                  const SizedBox(height: 28),
-                ],
-                if (lastWeekItems.isNotEmpty) ...[
-                  HistorySection(title: 'Last Week', items: lastWeekItems),
-                  const SizedBox(height: 28),
-                ],
-                if (lastMonthItems.isNotEmpty) ...[
-                  HistorySection(title: 'Last Month', items: lastMonthItems),
-                  const SizedBox(height: 28),
-                ],
-                if (olderItems.isNotEmpty) ...[
-                  HistorySection(title: 'Older', items: olderItems),
-                  const SizedBox(height: 28),
-                ],
+                      if (todayItems.isNotEmpty) ...[
+                        HistorySection(title: 'Today', items: todayItems),
+                        const SizedBox(height: 28),
+                      ],
+                      if (yesterdayItems.isNotEmpty) ...[
+                        HistorySection(
+                          title: 'Yesterday',
+                          items: yesterdayItems,
+                        ),
+                        const SizedBox(height: 28),
+                      ],
+                      if (lastWeekItems.isNotEmpty) ...[
+                        HistorySection(
+                          title: 'Last Week',
+                          items: lastWeekItems,
+                        ),
+                        const SizedBox(height: 28),
+                      ],
+                      if (lastMonthItems.isNotEmpty) ...[
+                        HistorySection(
+                          title: 'Last Month',
+                          items: lastMonthItems,
+                        ),
+                        const SizedBox(height: 28),
+                      ],
+                      if (olderItems.isNotEmpty) ...[
+                        HistorySection(title: 'Older', items: olderItems),
+                        const SizedBox(height: 28),
+                      ],
 
-                if (visibleItems.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Text(
-                      'No history found',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                      if (visibleItems.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Text(
+                            'No history found',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+
+                      HistoryTotalCard(
+                        totalActions: visibleItems.length,
+                        currentCount: widget.currentCount,
+                      ),
+                    ],
                   ),
-
-                HistoryTotalCard(
-                  totalActions: visibleItems.length,
-                  currentCount: widget.currentCount,
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
