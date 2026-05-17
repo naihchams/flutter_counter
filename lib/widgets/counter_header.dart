@@ -1,4 +1,5 @@
 import 'package:counter_ui_practice/screens/history_counter_screen.dart';
+import 'package:counter_ui_practice/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -35,7 +36,12 @@ class CounterHeader extends StatelessWidget {
       ),
       actions: <Widget>[
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsScreen()),
+            );
+          },
           icon: Icon(Icons.settings_outlined, size: 25),
         ),
       ],
