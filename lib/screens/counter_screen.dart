@@ -4,6 +4,7 @@ import 'package:counter_ui_practice/widgets/counter_header.dart';
 import 'package:counter_ui_practice/widgets/tip_card.dart';
 import 'package:counter_ui_practice/widgets/welcome_section.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen({super.key});
@@ -15,16 +16,29 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   int _counter = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  Future<void> _loadCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = prefs.getInt('counter') ?? 0;
+    });
+  }
+
+  Future<void> _saveCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('counter', _counter);
+  }
+
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
-  }
-
-  void _showCounterMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
-    );
+    _saveCounter();
   }
 
   void _decrementCounter() {
@@ -36,16 +50,20 @@ class _CounterScreenState extends State<CounterScreen> {
     setState(() {
       _counter--;
     });
+    _saveCounter();
   }
 
   void _resetCounter() {
-    if (_counter == 0) {
-      return;
-    }
-
     setState(() {
       _counter = 0;
     });
+    _saveCounter();
+  }
+
+  void _showCounterMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
+    );
   }
 
   @override
