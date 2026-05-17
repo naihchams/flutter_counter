@@ -21,13 +21,28 @@ class _CounterScreenState extends State<CounterScreen> {
     });
   }
 
+  void _showCounterMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
+    );
+  }
+
   void _decrementCounter() {
+    if (_counter == 0) {
+      _showCounterMessage('Counter cannot go below 0');
+      return;
+    }
+
     setState(() {
       _counter--;
     });
   }
 
   void _resetCounter() {
+    if (_counter == 0) {
+      return;
+    }
+
     setState(() {
       _counter = 0;
     });
@@ -64,6 +79,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   decrementFunction: _decrementCounter,
                   incrementFunction: _incrementCounter,
                   resetFunction: _resetCounter,
+                  isResetDisabled: _counter == 0,
                 ),
 
                 SizedBox(height: height * 0.03),

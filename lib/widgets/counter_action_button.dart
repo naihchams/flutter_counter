@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CounterActionButton extends StatefulWidget {
+  final bool isResetDisabled;
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -27,6 +28,7 @@ class CounterActionButton extends StatefulWidget {
     required this.backgroundColor,
     required this.iconColor,
     required this.textColor,
+    required this.isResetDisabled,
   });
 
   @override
@@ -38,13 +40,16 @@ class _CounterActionButtonState extends State<CounterActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = widget.isResetDisabled;
     final button = Container(
       width: widget.buttonSize,
       height: widget.buttonSize,
       decoration: BoxDecoration(
         shape: widget.isCircle ? BoxShape.circle : BoxShape.rectangle,
         borderRadius: widget.isCircle ? null : widget.borderRadius,
-        color: widget.backgroundColor,
+        color: isDisabled
+            ? Color.fromRGBO(235, 232, 242, 1)
+            : widget.backgroundColor,
       ),
       child: Center(
         child: widget.isReset
@@ -54,7 +59,9 @@ class _CounterActionButtonState extends State<CounterActionButton> {
                 child: Icon(
                   widget.icon,
                   size: widget.iconSize,
-                  color: widget.iconColor,
+                  color: isDisabled
+                      ? Color.fromRGBO(170, 164, 190, 1)
+                      : widget.iconColor,
                 ),
               )
             : Icon(widget.icon, size: widget.iconSize, color: widget.iconColor),

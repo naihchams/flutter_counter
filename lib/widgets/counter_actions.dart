@@ -5,12 +5,14 @@ class CounterActions extends StatelessWidget {
   final VoidCallback decrementFunction;
   final VoidCallback incrementFunction;
   final VoidCallback resetFunction;
+  final bool isResetDisabled;
 
   const CounterActions({
     super.key,
     required this.decrementFunction,
     required this.incrementFunction,
     required this.resetFunction,
+    required this.isResetDisabled,
   });
 
   @override
@@ -28,6 +30,7 @@ class CounterActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CounterActionButton(
+          isResetDisabled: false,
           icon: Icons.remove_rounded,
           label: 'Decrement',
           onTap: decrementFunction,
@@ -42,6 +45,7 @@ class CounterActions extends StatelessWidget {
         ),
 
         CounterActionButton(
+          isResetDisabled: false,
           icon: Icons.add_rounded,
           label: 'Increment',
           onTap: incrementFunction,
@@ -55,6 +59,7 @@ class CounterActions extends StatelessWidget {
         ),
 
         CounterActionButton(
+          isResetDisabled: isResetDisabled,
           icon: Icons.refresh_rounded,
           label: 'Reset',
           onTap: resetFunction,
