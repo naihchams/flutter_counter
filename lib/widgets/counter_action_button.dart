@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class CounterActionButton extends StatelessWidget {
+class CounterActionButton extends StatefulWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -15,7 +14,7 @@ class CounterActionButton extends StatelessWidget {
   final Color iconColor;
   final Color textColor;
 
-  CounterActionButton({
+  const CounterActionButton({
     super.key,
     required this.icon,
     required this.label,
@@ -31,52 +30,58 @@ class CounterActionButton extends StatelessWidget {
   });
 
   @override
+  State<CounterActionButton> createState() => _CounterActionButtonState();
+}
+
+class _CounterActionButtonState extends State<CounterActionButton> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        isCircle
-            ? Container(
-                width: buttonSize,
-                height: buttonSize,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: backgroundColor,
-                ),
-                child: IconButton(
-                  onPressed: onTap,
-                  icon: Icon(icon),
-                  iconSize: iconSize,
-                  color: iconColor,
+    final button = Container(
+      width: widget.buttonSize,
+      height: widget.buttonSize,
+      decoration: BoxDecoration(
+        shape: widget.isCircle ? BoxShape.circle : BoxShape.rectangle,
+        borderRadius: widget.isCircle ? null : widget.borderRadius,
+        color: widget.backgroundColor,
+      ),
+      child: Center(
+        child: widget.isReset
+            ? Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(pi),
+                child: Icon(
+                  widget.icon,
+                  size: widget.iconSize,
+                  color: widget.iconColor,
                 ),
               )
-            : Container(
-                height: buttonSize,
-                width: buttonSize,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: borderRadius,
-                  color: backgroundColor,
-                ),
-                child: isReset
-                    ? Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationY(pi),
-                        child: IconButton(
-                          onPressed: onTap,
-                          icon: Icon(icon),
-                          iconSize: iconSize,
-                          color: iconColor,
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: onTap,
-                        icon: Icon(icon),
-                        iconSize: iconSize,
-                        color: iconColor,
-                      ),
-              ),
-        SizedBox(height: 10),
-        Text(label, style: TextStyle(color: textColor)),
+            : Icon(widget.icon, size: widget.iconSize, color: widget.iconColor),
+      ),
+    );
+
+    return Column(
+      children: [
+        GestureDetector(
+          onTapDown: (_) {
+            setState(() => _pressed = true);
+          },
+          onTapUp: (_) {
+            setState(() => _pressed = false);
+            widget.onTap();
+          },
+          onTapCancel: () {
+            setState(() => _pressed = false);
+          },
+          child: AnimatedScale(
+            scale: _pressed ? 0.92 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: button,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(widget.label, style: TextStyle(color: widget.textColor)),
       ],
     );
   }
