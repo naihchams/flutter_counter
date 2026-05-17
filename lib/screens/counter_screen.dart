@@ -16,16 +16,20 @@ class CounterScreen extends StatefulWidget {
 
 class _CounterScreenState extends State<CounterScreen> {
   int _counter = 0;
-
   bool _allowNegative = true;
   int _stepValue = 1;
+  int _defaultValue = 0;
 
   @override
   void initState() {
     super.initState();
-    _loadSettings();
-    _loadCounter();
+    _initialize();
     _loadHistory();
+  }
+
+  Future<void> _initialize() async {
+    await _loadSettings();
+    await _loadCounter();
   }
 
   Future<void> _loadSettings() async {
@@ -34,13 +38,14 @@ class _CounterScreenState extends State<CounterScreen> {
     setState(() {
       _allowNegative = prefs.getBool('allowNegative') ?? true;
       _stepValue = prefs.getInt('stepValue') ?? 1;
+      _defaultValue = prefs.getInt('defaultValue') ?? 0;
     });
   }
 
   Future<void> _loadCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter = prefs.getInt('counter') ?? 0;
+      _counter = prefs.getInt('counter') ?? _defaultValue;
     });
   }
 
@@ -73,10 +78,10 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   void _resetCounter() {
-    if (_counter == 0) return;
+    if (_counter == _defaultValue) return;
 
     setState(() {
-      _counter = 0;
+      _counter = _defaultValue;
       _addHistoryItem('reset');
     });
 
@@ -155,7 +160,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   decrementFunction: _decrementCounter,
                   incrementFunction: _incrementCounter,
                   resetFunction: _resetCounter,
-                  isResetDisabled: _counter == 0,
+                  isResetDisabled: _counter == _defaultValue,
                 ),
 
                 SizedBox(height: height * 0.03),
