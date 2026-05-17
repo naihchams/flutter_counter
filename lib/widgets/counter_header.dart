@@ -1,3 +1,4 @@
+import 'package:counter_ui_practice/screens/history_counter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,7 +18,14 @@ class CounterHeader extends StatelessWidget {
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HistoryCounterScreen(),
+            ),
+          );
+        },
         icon: SvgPicture.asset(
           'assets/images/restore.svg',
           width: 30,
