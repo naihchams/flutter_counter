@@ -16,15 +16,13 @@ class CounterHeader extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
-      leading: GestureDetector(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SvgPicture.asset(
-            'assets/images/restore.svg',
-            semanticsLabel: 'Restore',
-            color: Colors.white,
-          ),
+      leading: IconButton(
+        onPressed: () {},
+        icon: SvgPicture.asset(
+          'assets/images/restore.svg',
+          width: 30,
+          height: 30,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
       ),
       actions: <Widget>[

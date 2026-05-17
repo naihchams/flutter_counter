@@ -7,10 +7,16 @@ class CounterCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    final outerCircleSize = width * 0.78;
+    final innerCircleSize = outerCircleSize * 0.72;
+    final counterFontSize = outerCircleSize * 0.24;
+
     return Center(
       child: Container(
-        width: 330,
-        height: 330,
+        width: outerCircleSize,
+        height: outerCircleSize,
         decoration: BoxDecoration(
           color: Color.fromRGBO(242, 239, 255, 1),
 
@@ -18,8 +24,8 @@ class CounterCircle extends StatelessWidget {
         ),
         child: Center(
           child: Container(
-            width: 240,
-            height: 240,
+            width: innerCircleSize,
+            height: innerCircleSize,
             decoration: BoxDecoration(
               color: Color.fromRGBO(248, 246, 253, 1),
 
@@ -42,7 +48,7 @@ class CounterCircle extends StatelessWidget {
                     count.toString(),
                     style: TextStyle(
                       color: Color.fromRGBO(117, 93, 236, 1),
-                      fontSize: 80,
+                      fontSize: counterFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TipCard extends StatelessWidget {
-  TipCard({super.key});
+  const TipCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    final cardWidth = width * 0.9;
+    final iconBoxSize = cardWidth * 0.16;
+    final spacing = cardWidth * 0.05;
+
     return Container(
       height: 100,
-      width: 350,
+      width: cardWidth,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -21,13 +27,14 @@ class TipCard extends StatelessWidget {
           ),
         ],
       ),
+      padding: EdgeInsets.all(cardWidth * 0.03),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: 55,
-            width: 55,
+            height: iconBoxSize,
+            width: iconBoxSize,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               shape: BoxShape.rectangle,
@@ -38,27 +45,26 @@ class TipCard extends StatelessWidget {
               color: Color.fromRGBO(117, 93, 236, 1),
             ),
           ),
-          SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Tip",
-                style: TextStyle(
-                  color: Color.fromRGBO(117, 93, 236, 1),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+          SizedBox(width: spacing),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Tip",
+                  style: TextStyle(
+                    color: Color.fromRGBO(117, 93, 236, 1),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 250,
-                child: Text(
+                Text(
                   'Use the button above to change the counter value',
                   style: TextStyle(color: Color.fromRGBO(87, 87, 91, 1)),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

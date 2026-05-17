@@ -17,47 +17,57 @@ class _CounterScreenState extends State<CounterScreen> {
 
   void _incrementCounter() {
     setState(() {
-      _counter++; // This change triggers a UI rebuild
+      _counter++;
     });
   }
 
   void _decrementCounter() {
     setState(() {
-      _counter--; // This change triggers a UI rebuild
+      _counter--;
     });
   }
 
   void _resetCounter() {
     setState(() {
-      _counter = 0; // This change triggers a UI rebuild
+      _counter = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    final horizontalPadding = width * 0.06;
+
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CounterHeader(title: 'Counter App'),
+        preferredSize: Size.fromHeight(height * 0.09),
+        child: const CounterHeader(title: 'Counter App'),
       ),
-      backgroundColor: Color.fromRGBO(248, 246, 253, 1),
+      backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: EdgeInsets.all(horizontalPadding),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                WelcomeSection(),
-                SizedBox(height: 25),
+              children: [
+                const WelcomeSection(),
+                SizedBox(height: height * 0.03),
+
                 CounterCircle(count: _counter),
-                SizedBox(height: 20),
+
+                SizedBox(height: height * 0.025),
+
                 CounterActions(
                   decrementFunction: _decrementCounter,
                   incrementFunction: _incrementCounter,
                   resetFunction: _resetCounter,
                 ),
-                SizedBox(height: 30),
+
+                SizedBox(height: height * 0.03),
+
                 TipCard(),
               ],
             ),

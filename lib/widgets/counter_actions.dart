@@ -6,7 +6,7 @@ class CounterActions extends StatelessWidget {
   final VoidCallback incrementFunction;
   final VoidCallback resetFunction;
 
-  CounterActions({
+  const CounterActions({
     super.key,
     required this.decrementFunction,
     required this.incrementFunction,
@@ -15,16 +15,24 @@ class CounterActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
+    final normalButtonSize = width * 0.18;
+    final centerButtonSize = width * 0.22;
+    final spacing = width * 0.06;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CounterActionButton(
           icon: Icons.remove_rounded,
           label: 'Decrement',
           onTap: decrementFunction,
-          buttonSize: 75,
-          iconSize: 40,
+          buttonSize: normalButtonSize,
+          iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: false,
           backgroundColor: Color.fromRGBO(230, 223, 249, 1),
@@ -33,13 +41,12 @@ class CounterActions extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
 
-        SizedBox(width: 40),
         CounterActionButton(
           icon: Icons.add_rounded,
           label: 'Increment',
           onTap: incrementFunction,
-          buttonSize: 90,
-          iconSize: 50,
+          buttonSize: centerButtonSize,
+          iconSize: centerButtonSize * 0.5,
           isCircle: true,
           isReset: false,
           backgroundColor: Color.fromRGBO(117, 93, 236, 1),
@@ -47,13 +54,12 @@ class CounterActions extends StatelessWidget {
           textColor: Colors.blueGrey,
         ),
 
-        SizedBox(width: 40),
         CounterActionButton(
           icon: Icons.refresh_rounded,
           label: 'Reset',
           onTap: resetFunction,
-          buttonSize: 75,
-          iconSize: 40,
+          buttonSize: normalButtonSize,
+          iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: true,
           backgroundColor: Color.fromRGBO(230, 223, 249, 1),
