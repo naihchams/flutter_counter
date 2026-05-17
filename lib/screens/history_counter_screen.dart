@@ -1,7 +1,6 @@
 import 'package:counter_ui_practice/widgets/history_card_stat.dart';
 import 'package:counter_ui_practice/widgets/history_section.dart';
 import 'package:counter_ui_practice/widgets/history_total_card.dart';
-
 import 'package:flutter/material.dart';
 
 class HistoryCounterScreen extends StatefulWidget {
@@ -12,8 +11,14 @@ class HistoryCounterScreen extends StatefulWidget {
 }
 
 class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  String selectedFilter = 'All';
+  String searchQuery = '';
+
+  final List<String> filters = ['All', 'Increment', 'Decrement', 'Reset'];
+
   final List<HistoryItem> allHistoryItems = [
-    // TODAY
     HistoryItem(type: 'increment', value: 16, createdAt: DateTime.now()),
     HistoryItem(
       type: 'decrement',
@@ -36,18 +41,6 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
       createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
     ),
     HistoryItem(
-      type: 'increment',
-      value: 6,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 18)),
-    ),
-    HistoryItem(
-      type: 'decrement',
-      value: 5,
-      createdAt: DateTime.now().subtract(const Duration(minutes: 22)),
-    ),
-
-    // YESTERDAY
-    HistoryItem(
       type: 'decrement',
       value: 4,
       createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
@@ -64,18 +57,6 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
     ),
     HistoryItem(
       type: 'increment',
-      value: 10,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 6)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 11,
-      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 7)),
-    ),
-
-    // LAST WEEK
-    HistoryItem(
-      type: 'increment',
       value: 20,
       createdAt: DateTime.now().subtract(const Duration(days: 3)),
     ),
@@ -85,130 +66,107 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
       createdAt: DateTime.now().subtract(const Duration(days: 3, hours: 2)),
     ),
     HistoryItem(
-      type: 'increment',
-      value: 25,
-      createdAt: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    HistoryItem(
       type: 'reset',
       value: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 4, hours: 5)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 7,
-      createdAt: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-    HistoryItem(
-      type: 'decrement',
-      value: 6,
-      createdAt: DateTime.now().subtract(const Duration(days: 6)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 8,
-      createdAt: DateTime.now().subtract(const Duration(days: 7)),
-    ),
-
-    // LAST MONTH
-    HistoryItem(
-      type: 'increment',
-      value: 30,
       createdAt: DateTime.now().subtract(const Duration(days: 12)),
     ),
     HistoryItem(
-      type: 'decrement',
-      value: 29,
-      createdAt: DateTime.now().subtract(const Duration(days: 14)),
-    ),
-    HistoryItem(
-      type: 'reset',
-      value: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 16)),
-    ),
-    HistoryItem(
       type: 'increment',
-      value: 13,
-      createdAt: DateTime.now().subtract(const Duration(days: 18)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 14,
+      value: 30,
       createdAt: DateTime.now().subtract(const Duration(days: 20)),
     ),
     HistoryItem(
       type: 'decrement',
-      value: 13,
-      createdAt: DateTime.now().subtract(const Duration(days: 22)),
-    ),
-    HistoryItem(
-      type: 'increment',
-      value: 40,
-      createdAt: DateTime.now().subtract(const Duration(days: 25)),
-    ),
-    HistoryItem(
-      type: 'reset',
-      value: 0,
-      createdAt: DateTime.now().subtract(const Duration(days: 28)),
+      value: 29,
+      createdAt: DateTime.now().subtract(const Duration(days: 35)),
     ),
   ];
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  List<HistoryItem> get filteredItems {
+    return allHistoryItems.where((item) {
+      final matchesFilter =
+          selectedFilter == 'All' ||
+          item.type.toLowerCase() == selectedFilter.toLowerCase();
+
+      final matchesSearch =
+          searchQuery.isEmpty ||
+          item.type.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          item.value.toString().contains(searchQuery);
+
+      return matchesFilter && matchesSearch;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
-
     final horizontalPadding = width * 0.06;
 
-    final TextEditingController _searchController = TextEditingController();
-
     final now = DateTime.now();
+    final visibleItems = filteredItems;
 
-    bool isSameDay(DateTime a, DateTime b) {
-      return a.year == b.year && a.month == b.month && a.day == b.day;
-    }
-
-    final todayItems = allHistoryItems.where((item) {
+    final todayItems = visibleItems.where((item) {
       return isSameDay(item.createdAt, now);
     }).toList();
 
-    final yesterdayItems = allHistoryItems.where((item) {
+    final yesterdayItems = visibleItems.where((item) {
       final yesterday = now.subtract(const Duration(days: 1));
       return isSameDay(item.createdAt, yesterday);
     }).toList();
 
-    final lastWeekItems = allHistoryItems.where((item) {
+    final lastWeekItems = visibleItems.where((item) {
       final difference = now.difference(item.createdAt).inDays;
       return difference >= 2 && difference <= 7;
     }).toList();
 
-    final lastMonthItems = allHistoryItems.where((item) {
+    final lastMonthItems = visibleItems.where((item) {
       final difference = now.difference(item.createdAt).inDays;
       return difference > 7 && difference <= 30;
     }).toList();
 
-    final olderItems = allHistoryItems.where((item) {
+    final olderItems = visibleItems.where((item) {
       final difference = now.difference(item.createdAt).inDays;
       return difference > 30;
     }).toList();
+
+    final increments = visibleItems
+        .where((item) => item.type == 'increment')
+        .length;
+    final decrements = visibleItems
+        .where((item) => item.type == 'decrement')
+        .length;
+    final resets = visibleItems.where((item) => item.type == 'reset').length;
+    final netChange = increments - decrements;
 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.07),
         child: AppBar(
           toolbarHeight: 50,
-          backgroundColor: Color.fromRGBO(117, 93, 236, 1),
-          title: Text('History', style: TextStyle(fontWeight: FontWeight.w500)),
+          backgroundColor: const Color.fromRGBO(117, 93, 236, 1),
+          title: const Text(
+            'History',
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
           foregroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
           ),
           leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
         ),
       ),
@@ -218,109 +176,129 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
           child: Padding(
             padding: EdgeInsets.all(horizontalPadding),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      width: width * 0.65,
-                      height: height * 0.05,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 12),
-                          Icon(Icons.search, color: Colors.grey),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: TextField(
-                              controller: _searchController,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Search history',
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                              onChanged: (text) {
-                                print('Current text: $text');
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
+                    Expanded(
                       child: Container(
-                        width: width * 0.2,
                         height: height * 0.05,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Color.fromRGBO(239, 236, 253, 1),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              'All',
-                              style: TextStyle(
-                                color: Color.fromRGBO(110, 91, 217, 1),
-                                fontWeight: FontWeight.w500,
+                            const Icon(Icons.search, color: Colors.grey),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextField(
+                                controller: _searchController,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Search history',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    searchQuery = text;
+                                  });
+                                },
                               ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Color.fromRGBO(110, 91, 217, 1),
                             ),
                           ],
                         ),
                       ),
                     ),
+
+                    const SizedBox(width: 12),
+
+                    Container(
+                      height: height * 0.05,
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(239, 236, 253, 1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedFilter,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Color.fromRGBO(110, 91, 217, 1),
+                          ),
+                          items: filters.map((filter) {
+                            return DropdownMenuItem(
+                              value: filter,
+                              child: Text(
+                                filter,
+                                style: const TextStyle(
+                                  color: Color.fromRGBO(110, 91, 217, 1),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value == null) return;
+
+                            setState(() {
+                              selectedFilter = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 10),
+
+                const SizedBox(height: 10),
+
                 HistoryCardStat(
-                  increments: 23,
-                  decrements: 12,
-                  resets: 5,
-                  netChange: 16,
+                  increments: increments,
+                  decrements: decrements,
+                  resets: resets,
+                  netChange: netChange,
                 ),
-                SizedBox(height: 10),
+
+                const SizedBox(height: 10),
+
                 if (todayItems.isNotEmpty) ...[
                   HistorySection(title: 'Today', items: todayItems),
                   const SizedBox(height: 28),
                 ],
-
                 if (yesterdayItems.isNotEmpty) ...[
                   HistorySection(title: 'Yesterday', items: yesterdayItems),
                   const SizedBox(height: 28),
                 ],
-
                 if (lastWeekItems.isNotEmpty) ...[
                   HistorySection(title: 'Last Week', items: lastWeekItems),
                   const SizedBox(height: 28),
                 ],
-
                 if (lastMonthItems.isNotEmpty) ...[
                   HistorySection(title: 'Last Month', items: lastMonthItems),
                   const SizedBox(height: 28),
                 ],
-
                 if (olderItems.isNotEmpty) ...[
                   HistorySection(title: 'Older', items: olderItems),
                   const SizedBox(height: 28),
                 ],
 
-                const SizedBox(height: 24),
-                HistoryTotalCard(totalActions: 40, currentCount: 16),
+                if (visibleItems.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Text(
+                      'No history found',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+
+                HistoryTotalCard(
+                  totalActions: visibleItems.length,
+                  currentCount: visibleItems.isEmpty
+                      ? 0
+                      : visibleItems.first.value,
+                ),
               ],
             ),
           ),
