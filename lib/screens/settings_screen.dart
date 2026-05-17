@@ -1,3 +1,7 @@
+import 'package:counter_ui_practice/widgets/custom_toggle.dart';
+import 'package:counter_ui_practice/widgets/setting_section.dart';
+import 'package:counter_ui_practice/widgets/setting_tile.dart';
+import 'package:counter_ui_practice/widgets/settings_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -650,130 +654,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-class SettingsSection extends StatelessWidget {
-  final String title;
-  final List<Widget> children;
-
-  const SettingsSection({
-    super.key,
-    required this.title,
-    required this.children,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: Color.fromRGBO(25, 31, 45, 1),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Column(children: children),
-        ),
-      ],
-    );
-  }
-}
-
-class SettingsTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Widget? trailing;
-
-  const SettingsTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.trailing,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      child: Row(
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(242, 239, 255, 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              icon,
-              color: const Color.fromRGBO(117, 93, 236, 1),
-              size: 22,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color.fromRGBO(120, 130, 150, 1),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          if (trailing != null) trailing!,
-        ],
-      ),
-    );
-  }
-}
-
-class SettingsDivider extends StatelessWidget {
-  const SettingsDivider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 1,
-      margin: const EdgeInsets.only(left: 84, right: 18),
-      color: const Color.fromRGBO(230, 230, 240, 1),
-    );
-  }
-}
-
 class _SmallButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
@@ -792,65 +672,6 @@ class _SmallButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, color: const Color.fromRGBO(117, 93, 236, 1)),
-      ),
-    );
-  }
-}
-
-class CustomToggle extends StatelessWidget {
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  const CustomToggle({super.key, required this.value, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        onChanged(!value);
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOut,
-        width: 58,
-        height: 32,
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: value
-              ? const Color.fromRGBO(117, 93, 236, 1)
-              : const Color.fromRGBO(232, 230, 240, 1),
-          border: value
-              ? null
-              : Border.all(
-                  color: const Color.fromRGBO(210, 207, 222, 1),
-                  width: 1.5,
-                ),
-        ),
-        child: AnimatedAlign(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            width: 26,
-            height: 26,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: value
-                  ? Colors.white
-                  : const Color.fromRGBO(170, 165, 185, 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
