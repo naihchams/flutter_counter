@@ -17,11 +17,24 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   int _counter = 0;
 
+  bool _allowNegative = true;
+  int _stepValue = 1;
+
   @override
   void initState() {
     super.initState();
+    _loadSettings();
     _loadCounter();
     _loadHistory();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      _allowNegative = prefs.getBool('allowNegative') ?? true;
+      _stepValue = prefs.getInt('stepValue') ?? 1;
+    });
   }
 
   Future<void> _loadCounter() async {
@@ -38,7 +51,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      _counter += _stepValue;
       _addHistoryItem('increment');
     });
 
@@ -46,13 +59,13 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   void _decrementCounter() {
-    if (_counter == 0) {
+    if (!_allowNegative && _counter - _stepValue < 0) {
       _showCounterMessage('Counter cannot go below 0');
       return;
     }
 
     setState(() {
-      _counter--;
+      _counter -= _stepValue;
       _addHistoryItem('decrement');
     });
 
@@ -115,7 +128,14 @@ class _CounterScreenState extends State<CounterScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.09),
-        child: CounterHeader(title: 'Counter App', count: _counter),
+        child: CounterHeader(
+          title: 'Counter App',
+          count: _counter,
+          onReturnedFromSettings: () async {
+            _loadSettings();
+            _loadCounter();
+          },
+        ),
       ),
       backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
       body: SafeArea(

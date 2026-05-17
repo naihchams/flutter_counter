@@ -6,7 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CounterHeader extends StatelessWidget {
   final String title;
   final int count;
-  const CounterHeader({super.key, required this.title, required this.count});
+  final Future<void> Function() onReturnedFromSettings;
+
+  const CounterHeader({
+    super.key,
+    required this.title,
+    required this.count,
+    required this.onReturnedFromSettings,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +43,13 @@ class CounterHeader extends StatelessWidget {
       ),
       actions: <Widget>[
         IconButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingsScreen()),
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
             );
+
+            await onReturnedFromSettings();
           },
           icon: Icon(Icons.settings_outlined, size: 25),
         ),

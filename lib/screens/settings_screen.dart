@@ -21,6 +21,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool darkMode = false;
   int stepValue = 1;
   int defaultValue = 0;
+  bool hasChanges = false;
+
   Color themeColor = const Color.fromRGBO(117, 93, 236, 1);
 
   @override
@@ -212,6 +214,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                           setState(() {
                             defaultValue = value;
+                            hasChanges = true;
                           });
 
                           await _saveDefaultValue(value);
@@ -270,6 +273,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: () async {
                         setState(() {
                           themeColor = color;
+                          hasChanges = true;
                         });
                         await _saveThemeColor(color);
                         Navigator.pop(context);
@@ -433,7 +437,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
           ),
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, hasChanges),
             icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
         ),
@@ -458,6 +462,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onChanged: (value) async {
                           setState(() {
                             allowNegative = value;
+                            hasChanges = true;
                           });
                           await _saveAllowNegative(value);
                         },
@@ -477,6 +482,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               if (stepValue > 1) {
                                 setState(() {
                                   stepValue--;
+                                  hasChanges = true;
                                 });
                                 await _saveStepValue(stepValue);
                               } else {
@@ -513,6 +519,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             onTap: () async {
                               setState(() {
                                 stepValue++;
+                                hasChanges = true;
                               });
                               await _saveStepValue(stepValue);
                             },
@@ -581,6 +588,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onChanged: (value) async {
                           setState(() {
                             darkMode = value;
+                            hasChanges = true;
                           });
                           await _saveDarkMode(value);
                         },
