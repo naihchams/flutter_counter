@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CounterHeader extends StatelessWidget {
-  String title;
+  final String title;
 
-  CounterHeader({super.key, required this.title});
+  const CounterHeader({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

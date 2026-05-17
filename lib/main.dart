@@ -1,12 +1,9 @@
-import 'package:counter_ui_practice/widgets/counter_action_button.dart';
 import 'package:counter_ui_practice/widgets/counter_actions.dart';
 import 'package:counter_ui_practice/widgets/counter_circle.dart';
 import 'package:counter_ui_practice/widgets/counter_header.dart';
 import 'package:counter_ui_practice/widgets/tip_card.dart';
 import 'package:counter_ui_practice/widgets/welcome_section.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'dart:math';
 
 void main() {
   runApp(const MyApp());
