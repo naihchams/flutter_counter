@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class HistoryTotalCard extends StatelessWidget {
   final int totalActions;
   final int currentCount;
+  final Color primaryColor;
 
   const HistoryTotalCard({
     super.key,
     required this.totalActions,
     required this.currentCount,
+    required this.primaryColor,
   });
 
   @override
@@ -15,7 +17,7 @@ class HistoryTotalCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(242, 239, 255, 1),
+        color: primaryColor.withOpacity(0.14),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -31,26 +33,30 @@ class HistoryTotalCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(230, 223, 249, 1),
+              color: primaryColor.withOpacity(0.22),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(
-              Icons.bar_chart_rounded,
-              color: Color.fromRGBO(117, 93, 236, 1),
-              size: 30,
-            ),
+            child: Icon(Icons.bar_chart_rounded, color: primaryColor, size: 30),
           ),
 
           const SizedBox(width: 24),
 
           Expanded(
-            child: _TotalItem(label: 'Total Actions', value: totalActions),
+            child: _TotalItem(
+              label: 'Total Actions',
+              value: totalActions,
+              textColor: primaryColor,
+            ),
           ),
 
-          const _CenterDivider(),
+          _CenterDivider(primaryColor: primaryColor),
 
           Expanded(
-            child: _TotalItem(label: 'Current Count', value: currentCount),
+            child: _TotalItem(
+              label: 'Current Count',
+              value: currentCount,
+              textColor: primaryColor,
+            ),
           ),
         ],
       ),
@@ -61,8 +67,13 @@ class HistoryTotalCard extends StatelessWidget {
 class _TotalItem extends StatelessWidget {
   final String label;
   final int value;
+  final Color textColor;
 
-  const _TotalItem({required this.label, required this.value});
+  const _TotalItem({
+    required this.label,
+    required this.value,
+    required this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +81,8 @@ class _TotalItem extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color.fromRGBO(117, 93, 236, 1),
+          style: TextStyle(
+            color: textColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -79,8 +90,8 @@ class _TotalItem extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           value.toString(),
-          style: const TextStyle(
-            color: Color.fromRGBO(117, 93, 236, 1),
+          style: TextStyle(
+            color: textColor,
             fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
@@ -91,20 +102,22 @@ class _TotalItem extends StatelessWidget {
 }
 
 class _CenterDivider extends StatelessWidget {
-  const _CenterDivider();
+  final Color primaryColor;
+
+  const _CenterDivider({required this.primaryColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 1,
       height: 55,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            Color.fromRGBO(170, 155, 230, 1),
+            primaryColor.withOpacity(0.6),
             Colors.transparent,
           ],
         ),

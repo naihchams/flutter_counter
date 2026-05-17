@@ -5,17 +5,24 @@ class WelcomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Text(
           "Welcome! 👋",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           'Simple counter to increase, decrease, and reset',
-          style: TextStyle(color: Colors.blueGrey),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+          ),
         ),
       ],
     );

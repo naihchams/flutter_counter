@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({super.key});
+  final Future<void> Function() onSettingsChanged;
+
+  const CounterScreen({super.key, required this.onSettingsChanged});
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
@@ -19,6 +21,7 @@ class _CounterScreenState extends State<CounterScreen> {
   bool _allowNegative = true;
   int _stepValue = 1;
   int _defaultValue = 0;
+  Color _themeColor = const Color.fromRGBO(117, 93, 236, 1);
 
   @override
   void initState() {
@@ -39,6 +42,10 @@ class _CounterScreenState extends State<CounterScreen> {
       _allowNegative = prefs.getBool('allowNegative') ?? true;
       _stepValue = prefs.getInt('stepValue') ?? 1;
       _defaultValue = prefs.getInt('defaultValue') ?? 0;
+      _themeColor = Color(
+        prefs.getInt('themeColor') ??
+            const Color.fromRGBO(117, 93, 236, 1).value,
+      );
     });
   }
 
@@ -136,13 +143,15 @@ class _CounterScreenState extends State<CounterScreen> {
         child: CounterHeader(
           title: 'Counter App',
           count: _counter,
+          primaryColor: _themeColor,
           onReturnedFromSettings: () async {
-            _loadSettings();
-            _loadCounter();
+            await _loadSettings();
+            await _loadCounter();
+            await widget.onSettingsChanged();
           },
         ),
       ),
-      backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -152,11 +161,12 @@ class _CounterScreenState extends State<CounterScreen> {
                 const WelcomeSection(),
                 SizedBox(height: height * 0.03),
 
-                CounterCircle(count: _counter),
+                CounterCircle(count: _counter, primaryColor: _themeColor),
 
                 SizedBox(height: height * 0.025),
 
                 CounterActions(
+                  primaryColor: _themeColor,
                   decrementFunction: _decrementCounter,
                   incrementFunction: _incrementCounter,
                   resetFunction: _resetCounter,
@@ -165,7 +175,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
                 SizedBox(height: height * 0.03),
 
-                TipCard(),
+                TipCard(primaryColor: _themeColor),
               ],
             ),
           ),

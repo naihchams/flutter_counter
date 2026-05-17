@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class CustomToggle extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
+  final Color activeColor;
 
-  const CustomToggle({super.key, required this.value, required this.onChanged});
+  const CustomToggle({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.activeColor = const Color.fromRGBO(117, 93, 236, 1),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +27,7 @@ class CustomToggle extends StatelessWidget {
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: value
-              ? const Color.fromRGBO(117, 93, 236, 1)
-              : const Color.fromRGBO(232, 230, 240, 1),
+          color: value ? activeColor : const Color.fromRGBO(232, 230, 240, 1),
           border: value
               ? null
               : Border.all(

@@ -2,6 +2,7 @@ import 'package:counter_ui_practice/widgets/counter_action_button.dart';
 import 'package:flutter/material.dart';
 
 class CounterActions extends StatelessWidget {
+  final Color primaryColor;
   final VoidCallback decrementFunction;
   final VoidCallback incrementFunction;
   final VoidCallback resetFunction;
@@ -9,6 +10,7 @@ class CounterActions extends StatelessWidget {
 
   const CounterActions({
     super.key,
+    required this.primaryColor,
     required this.decrementFunction,
     required this.incrementFunction,
     required this.resetFunction,
@@ -38,8 +40,8 @@ class CounterActions extends StatelessWidget {
           iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: false,
-          backgroundColor: Color.fromRGBO(230, 223, 249, 1),
-          iconColor: Color.fromRGBO(117, 93, 236, 1),
+          backgroundColor: primaryColor.withOpacity(0.18),
+          iconColor: primaryColor,
           textColor: Colors.blueGrey,
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
@@ -53,9 +55,9 @@ class CounterActions extends StatelessWidget {
           iconSize: centerButtonSize * 0.5,
           isCircle: true,
           isReset: false,
-          backgroundColor: Color.fromRGBO(117, 93, 236, 1),
+          backgroundColor: primaryColor,
           iconColor: Colors.white,
-          textColor: Colors.blueGrey,
+          textColor: Colors.white,
         ),
 
         CounterActionButton(
@@ -67,8 +69,8 @@ class CounterActions extends StatelessWidget {
           iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: true,
-          backgroundColor: Color.fromRGBO(230, 223, 249, 1),
-          iconColor: Color.fromRGBO(117, 93, 236, 1),
+          backgroundColor: primaryColor.withOpacity(0.18),
+          iconColor: primaryColor,
           textColor: Colors.blueGrey,
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),

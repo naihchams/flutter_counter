@@ -17,6 +17,9 @@ class HistorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     if (items.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -26,10 +29,10 @@ class HistorySection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,
-            color: Color.fromRGBO(25, 31, 45, 1),
+            color: isDark ? Colors.white : const Color.fromRGBO(25, 31, 45, 1),
           ),
         ),
 
@@ -38,11 +41,13 @@ class HistorySection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? const Color(0xFF111111) : theme.cardColor,
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: isDark
+                    ? Colors.white.withOpacity(0.03)
+                    : Colors.black.withOpacity(0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 6),
               ),
@@ -69,6 +74,17 @@ class HistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = isDark
+        ? Colors.white
+        : const Color.fromRGBO(20, 24, 35, 1);
+    final subtitleColor = isDark
+        ? Colors.white70
+        : const Color.fromRGBO(120, 130, 150, 1);
+    final chevronColor = isDark
+        ? Colors.white54
+        : const Color.fromRGBO(145, 150, 165, 1);
     final style = _getStyle(item.type);
 
     return Padding(
@@ -93,10 +109,10 @@ class HistoryTile extends StatelessWidget {
               children: [
                 Text(
                   style.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Color.fromRGBO(20, 24, 35, 1),
+                    color: titleColor,
                   ),
                 ),
 
@@ -104,10 +120,7 @@ class HistoryTile extends StatelessWidget {
 
                 Text(
                   _formatTime(item.createdAt),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color.fromRGBO(120, 130, 150, 1),
-                  ),
+                  style: TextStyle(fontSize: 12, color: subtitleColor),
                 ),
               ],
             ),
@@ -124,11 +137,7 @@ class HistoryTile extends StatelessWidget {
 
           const SizedBox(width: 10),
 
-          const Icon(
-            Icons.chevron_right,
-            color: Color.fromRGBO(145, 150, 165, 1),
-            size: 22,
-          ),
+          Icon(Icons.chevron_right, color: chevronColor, size: 22),
         ],
       ),
     );
@@ -184,14 +193,18 @@ class _SoftDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       height: 1,
       margin: const EdgeInsets.only(left: 70, right: 18),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
             Colors.transparent,
-            Color.fromRGBO(225, 226, 238, 1),
+            isDark
+                ? const Color(0xFF2E2E2E)
+                : const Color.fromRGBO(225, 226, 238, 1),
             Colors.transparent,
           ],
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TipCard extends StatelessWidget {
-  const TipCard({super.key});
+  final Color primaryColor;
+
+  const TipCard({super.key, required this.primaryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -11,19 +13,21 @@ class TipCard extends StatelessWidget {
     final iconBoxSize = cardWidth * 0.16;
     final spacing = cardWidth * 0.05;
 
+    final theme = Theme.of(context);
+
     return Container(
       height: 100,
       width: cardWidth,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // Shadow color
-            spreadRadius: 2, // How much the shadow expands
-            blurRadius: 20, // Softness of the shadow
-            offset: Offset(0, 0),
+            color: theme.shadowColor.withOpacity(0.12),
+            spreadRadius: 2,
+            blurRadius: 20,
+            offset: const Offset(0, 0),
           ),
         ],
       ),
@@ -38,12 +42,9 @@ class TipCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               shape: BoxShape.rectangle,
-              color: Color.fromRGBO(230, 223, 249, 1),
+              color: primaryColor.withOpacity(0.16),
             ),
-            child: Icon(
-              Icons.lightbulb_outline,
-              color: Color.fromRGBO(117, 93, 236, 1),
-            ),
+            child: Icon(Icons.lightbulb_outline, color: primaryColor),
           ),
           SizedBox(width: spacing),
           Expanded(
@@ -54,7 +55,7 @@ class TipCard extends StatelessWidget {
                 Text(
                   "Tip",
                   style: TextStyle(
-                    color: Color.fromRGBO(117, 93, 236, 1),
+                    color: primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

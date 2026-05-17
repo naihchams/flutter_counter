@@ -6,12 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CounterHeader extends StatelessWidget {
   final String title;
   final int count;
+  final Color primaryColor;
   final Future<void> Function() onReturnedFromSettings;
 
   const CounterHeader({
     super.key,
     required this.title,
     required this.count,
+    required this.primaryColor,
     required this.onReturnedFromSettings,
   });
 
@@ -19,7 +21,7 @@ class CounterHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
-      backgroundColor: Color.fromRGBO(117, 93, 236, 1),
+      backgroundColor: primaryColor,
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
       foregroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -46,7 +48,10 @@ class CounterHeader extends StatelessWidget {
           onPressed: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              MaterialPageRoute(
+                builder: (_) =>
+                    SettingsScreen(onThemeChanged: onReturnedFromSettings),
+              ),
             );
 
             await onReturnedFromSettings();

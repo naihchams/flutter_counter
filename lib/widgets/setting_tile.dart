@@ -1,10 +1,12 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final Widget? trailing;
+  final Color iconColor;
+  final Color iconBackgroundColor;
 
   const SettingsTile({
     super.key,
@@ -12,6 +14,8 @@ class SettingsTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.trailing,
+    this.iconColor = const Color.fromRGBO(117, 93, 236, 1),
+    this.iconBackgroundColor = const Color.fromRGBO(242, 239, 255, 1),
   });
 
   @override
@@ -24,14 +28,10 @@ class SettingsTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(242, 239, 255, 1),
+              color: iconBackgroundColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: const Color.fromRGBO(117, 93, 236, 1),
-              size: 22,
-            ),
+            child: Icon(icon, color: iconColor, size: 22),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -52,9 +52,11 @@ class SettingsTile extends StatelessWidget {
                   subtitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: Color.fromRGBO(120, 130, 150, 1),
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.color?.withOpacity(0.7),
                   ),
                 ),
               ],

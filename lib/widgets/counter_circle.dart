@@ -3,12 +3,19 @@ import 'dart:math' as math;
 
 class CounterCircle extends StatelessWidget {
   final int count;
+  final Color primaryColor;
 
-  const CounterCircle({super.key, required this.count});
+  const CounterCircle({
+    super.key,
+    required this.count,
+    required this.primaryColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     final outerCircleSize = width * 0.78;
     final innerCircleSize = outerCircleSize * 0.72;
@@ -28,8 +35,8 @@ class CounterCircle extends StatelessWidget {
             Container(
               width: outerCircleSize,
               height: outerCircleSize,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(242, 239, 255, 1),
+              decoration: BoxDecoration(
+                color: primaryColor.withOpacity(isDark ? 0.12 : 0.16),
                 shape: BoxShape.circle,
               ),
             ),
@@ -38,8 +45,8 @@ class CounterCircle extends StatelessWidget {
             TweenAnimationBuilder<double>(
               key: ValueKey(count),
               tween: Tween<double>(begin: 0.0, end: 1.0),
-              duration: const Duration(milliseconds: 700),
-              curve: Curves.fastOutSlowIn, // Ultra-smooth premium easing curve
+              duration: const Duration(milliseconds: 900),
+              curve: Curves.easeInOut,
               builder: (context, value, child) {
                 return Transform.rotate(
                   angle: value * 2 * math.pi,
@@ -50,20 +57,22 @@ class CounterCircle extends StatelessWidget {
                       alignment: Alignment
                           .topCenter, // Anchors the light perfectly to the top rim
                       child: Container(
-                        width:
-                            outerCircleSize *
-                            0.35, // Controls how long the light tail is
+                        width: outerCircleSize * (isDark ? 0.28 : 0.35),
                         height:
                             rimThickness, // Constrains it strictly to the ring width
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withOpacity(0.0),
-                              Colors.white.withOpacity(
-                                0.6,
-                              ), // Soft, elegant sheen
-                              Colors.white.withOpacity(0.0),
-                            ],
+                            colors: isDark
+                                ? [
+                                    primaryColor.withOpacity(0.0),
+                                    primaryColor.withOpacity(0.12),
+                                    primaryColor.withOpacity(0.0),
+                                  ]
+                                : [
+                                    Colors.white.withOpacity(0.0),
+                                    Colors.white.withOpacity(0.60),
+                                    Colors.white.withOpacity(0.0),
+                                  ],
                           ),
                         ),
                       ),
@@ -78,11 +87,11 @@ class CounterCircle extends StatelessWidget {
               width: innerCircleSize,
               height: innerCircleSize,
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(248, 246, 253, 1),
+                color: Theme.of(context).cardColor,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Theme.of(context).shadowColor.withOpacity(0.12),
                     spreadRadius: 2,
                     blurRadius: 20,
                     offset: const Offset(0, 0),
@@ -103,7 +112,7 @@ class CounterCircle extends StatelessWidget {
                             return Text(
                               value.round().toString(),
                               style: TextStyle(
-                                color: const Color.fromRGBO(117, 93, 236, 1),
+                                color: primaryColor,
                                 fontSize: counterFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -117,11 +126,12 @@ class CounterCircle extends StatelessWidget {
                       ],
                     ),
 
-                    // Your original inner linear sweep
+                    // Inner linear sweep highlight
                     TweenAnimationBuilder<double>(
                       key: ValueKey(count),
                       tween: Tween<double>(begin: -1.5, end: 1.5),
-                      duration: const Duration(milliseconds: 550),
+                      duration: const Duration(milliseconds: 650),
+                      curve: Curves.easeInOut,
                       builder: (context, value, child) {
                         return Transform.translate(
                           offset: Offset(value * innerCircleSize, 0),
@@ -133,9 +143,11 @@ class CounterCircle extends StatelessWidget {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Colors.white.withOpacity(0.0),
-                                    Colors.white.withOpacity(0.45),
-                                    Colors.white.withOpacity(0.0),
+                                    primaryColor.withOpacity(0.0),
+                                    primaryColor.withOpacity(
+                                      isDark ? 0.18 : 0.45,
+                                    ),
+                                    primaryColor.withOpacity(0.0),
                                   ],
                                 ),
                               ),

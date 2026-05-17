@@ -16,14 +16,19 @@ class HistoryCardStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF111111) : Colors.white,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: isDark
+                ? Colors.white.withOpacity(0.02)
+                : Colors.black.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -96,21 +101,26 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         Container(
           width: 38,
           height: 38,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: lightColor),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDark ? lightColor.withOpacity(0.18) : lightColor,
+          ),
           child: Icon(icon, color: mainColor, size: 22),
         ),
         const SizedBox(height: 10),
         Text(
           number.toString(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(20, 24, 35, 1),
+            color: isDark ? Colors.white : const Color.fromRGBO(20, 24, 35, 1),
           ),
         ),
         const SizedBox(height: 3),
@@ -120,7 +130,7 @@ class _StatItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: mainColor,
+            color: isDark ? Colors.white70 : mainColor,
           ),
         ),
       ],
@@ -133,10 +143,12 @@ class _VerticalDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: 1,
       height: 100,
-      color: const Color.fromRGBO(230, 230, 240, 1),
+      color: isDark ? Colors.white12 : const Color.fromRGBO(230, 230, 240, 1),
     );
   }
 }

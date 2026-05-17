@@ -10,7 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final VoidCallback? onThemeChanged;
+
+  const SettingsScreen({super.key, this.onThemeChanged});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -94,6 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showDefaultValueDialog() {
+    final theme = Theme.of(context);
     final controller = TextEditingController(text: defaultValue.toString());
 
     showDialog(
@@ -104,11 +107,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Container(
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(26),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: theme.shadowColor.withOpacity(0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -121,29 +124,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 54,
                   height: 54,
                   decoration: BoxDecoration(
-                    color: const Color.fromRGBO(242, 239, 255, 1),
+                    color: themeColor.withOpacity(0.16),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.refresh_rounded,
-                    color: Color.fromRGBO(117, 93, 236, 1),
+                    color: themeColor,
                     size: 30,
                   ),
                 ),
 
                 const SizedBox(height: 18),
 
-                const Text(
+                Text(
                   'Default Value',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 const SizedBox(height: 8),
 
-                const Text(
+                Text(
                   'Set the starting value for your counter.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.blueGrey, fontSize: 14),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+                    fontSize: 14,
+                  ),
                 ),
 
                 const SizedBox(height: 22),
@@ -152,19 +161,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   controller: controller,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  cursorColor: const Color.fromRGBO(117, 93, 236, 1),
-                  style: const TextStyle(
-                    fontSize: 26,
+                  cursorColor: themeColor,
+                  style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(40, 40, 50, 1),
                   ),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color.fromRGBO(248, 246, 253, 1),
+                    fillColor: theme.cardColor,
                     hintText: '0',
-                    hintStyle: const TextStyle(
-                      color: Color.fromRGBO(170, 170, 185, 1),
+                    hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.textTheme.bodyMedium?.color?.withOpacity(
+                        0.6,
+                      ),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
@@ -172,10 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
-                      borderSide: const BorderSide(
-                        color: Color.fromRGBO(117, 93, 236, 1),
-                        width: 2,
-                      ),
+                      borderSide: BorderSide(color: themeColor, width: 2),
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 22),
                   ),
@@ -234,6 +240,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showThemeColorDialog() {
+    final theme = Theme.of(context);
     final colors = [
       const Color.fromRGBO(117, 93, 236, 1),
       Colors.blue,
@@ -251,15 +258,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Container(
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(26),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.shadowColor.withOpacity(0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Theme Color',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 22),
 
@@ -276,6 +293,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           hasChanges = true;
                         });
                         await _saveThemeColor(color);
+                        widget.onThemeChanged?.call();
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -286,7 +304,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           color: color,
                           border: Border.all(
                             color: isSelected
-                                ? Colors.black
+                                ? theme.colorScheme.onSurface
                                 : Colors.transparent,
                             width: 3,
                           ),
@@ -309,6 +327,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showClearHistoryDialog() {
+    final theme = Theme.of(context);
+
     showDialog(
       context: context,
       builder: (context) {
@@ -317,11 +337,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(26),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: theme.shadowColor.withOpacity(0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -334,30 +354,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 58,
                   height: 58,
                   decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 232, 236, 1),
+                    color: themeColor.withOpacity(0.16),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.delete_outline,
-                    color: Color.fromRGBO(255, 80, 95, 1),
+                    color: themeColor,
                     size: 32,
                   ),
                 ),
 
                 const SizedBox(height: 18),
 
-                const Text(
+                Text(
                   'Clear History?',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 const SizedBox(height: 10),
 
-                const Text(
+                Text(
                   'This will permanently remove all counter history.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.blueGrey,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
                     fontSize: 14,
                     height: 1.4,
                   ),
@@ -417,20 +439,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
     final horizontalPadding = width * 0.06;
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.07),
         child: AppBar(
           toolbarHeight: 50,
-          backgroundColor: const Color.fromRGBO(117, 93, 236, 1),
-          title: const Text(
+          backgroundColor: themeColor,
+          title: Text(
             'Settings',
-            style: TextStyle(fontWeight: FontWeight.w500),
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
           foregroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
@@ -442,7 +469,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       ),
-      backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -455,10 +481,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     SettingsTile(
                       icon: Icons.exposure_minus_1,
+                      iconColor: themeColor,
+                      iconBackgroundColor: themeColor.withOpacity(0.16),
                       title: 'Allow Negative Numbers',
                       subtitle: 'Allow counter to go below zero',
                       trailing: CustomToggle(
                         value: allowNegative,
+                        activeColor: themeColor,
                         onChanged: (value) async {
                           setState(() {
                             allowNegative = value;
@@ -471,6 +500,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SettingsDivider(),
                     SettingsTile(
                       icon: Icons.stairs_rounded,
+                      iconColor: themeColor,
+                      iconBackgroundColor: themeColor.withOpacity(0.16),
                       title: 'Step Value',
                       subtitle: 'Amount to change on each tap',
                       trailing: Row(
@@ -478,6 +509,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           _SmallButton(
                             icon: Icons.remove,
+                            color: themeColor,
                             onTap: () async {
                               if (stepValue > 1) {
                                 setState(() {
@@ -516,6 +548,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                           _SmallButton(
                             icon: Icons.add,
+                            color: themeColor,
                             onTap: () async {
                               setState(() {
                                 stepValue++;
@@ -532,6 +565,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: _showDefaultValueDialog,
                       child: SettingsTile(
                         icon: Icons.refresh_rounded,
+                        iconColor: themeColor,
+                        iconBackgroundColor: themeColor.withOpacity(0.16),
                         title: 'Default Value',
                         subtitle: 'Set initial value for the counter',
                         trailing: Row(
@@ -539,8 +574,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             Text(
                               defaultValue.toString(),
-                              style: const TextStyle(
-                                color: Color.fromRGBO(117, 93, 236, 1),
+                              style: TextStyle(
+                                color: themeColor,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -563,6 +598,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: _showThemeColorDialog,
                       child: SettingsTile(
                         icon: Icons.palette_outlined,
+                        iconColor: themeColor,
+                        iconBackgroundColor: themeColor.withOpacity(0.16),
                         title: 'Theme Color',
                         subtitle: 'Choose your preferred color theme',
                         trailing: Row(
@@ -581,16 +618,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SettingsDivider(),
                     SettingsTile(
                       icon: Icons.dark_mode_outlined,
+                      iconColor: themeColor,
+                      iconBackgroundColor: themeColor.withOpacity(0.16),
                       title: 'Dark Mode',
                       subtitle: 'Use dark theme',
                       trailing: CustomToggle(
                         value: darkMode,
+                        activeColor: themeColor,
                         onChanged: (value) async {
                           setState(() {
                             darkMode = value;
                             hasChanges = true;
                           });
                           await _saveDarkMode(value);
+                          widget.onThemeChanged?.call();
                         },
                       ),
                     ),
@@ -606,21 +647,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: _showClearHistoryDialog,
                       child: SettingsTile(
                         icon: Icons.history,
+                        iconColor: themeColor,
+                        iconBackgroundColor: themeColor.withOpacity(0.16),
                         title: 'Clear History',
                         subtitle: 'Remove all counter history',
-                        trailing: const Row(
+                        trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CircleAvatar(
                               radius: 20,
-                              backgroundColor: Color.fromRGBO(255, 232, 236, 1),
+                              backgroundColor: themeColor.withOpacity(0.16),
                               child: Icon(
                                 Icons.delete_outline,
-                                color: Color.fromRGBO(255, 80, 95, 1),
+                                color: themeColor,
                               ),
                             ),
-                            SizedBox(width: 10),
-                            Icon(Icons.chevron_right, color: Colors.grey),
+                            const SizedBox(width: 10),
+                            Icon(
+                              Icons.chevron_right,
+                              color: themeColor.withOpacity(0.75),
+                            ),
                           ],
                         ),
                       ),
@@ -630,11 +676,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: _exportHistory,
                       child: SettingsTile(
                         icon: Icons.download_rounded,
+                        iconColor: themeColor,
+                        iconBackgroundColor: themeColor.withOpacity(0.16),
                         title: 'Export History',
                         subtitle: 'Save your history as a file',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.chevron_right,
-                          color: Colors.grey,
+                          color: themeColor.withOpacity(0.75),
                         ),
                       ),
                     ),
@@ -645,9 +693,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 SettingsSection(
                   title: 'About',
-                  children: const [
+                  children: [
                     SettingsTile(
                       icon: Icons.info_outline,
+                      iconColor: themeColor,
+                      iconBackgroundColor: themeColor.withOpacity(0.16),
                       title: 'About Counter App',
                       subtitle: 'Version 1.0.0',
                     ),
@@ -666,7 +716,13 @@ class _SmallButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _SmallButton({required this.icon, required this.onTap});
+  const _SmallButton({
+    required this.icon,
+    required this.onTap,
+    this.color = const Color.fromRGBO(117, 93, 236, 1),
+  });
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -676,10 +732,10 @@ class _SmallButton extends StatelessWidget {
         width: 44,
         height: 40,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(242, 239, 255, 1),
+          color: color.withOpacity(0.16),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(icon, color: const Color.fromRGBO(117, 93, 236, 1)),
+        child: Icon(icon, color: color),
       ),
     );
   }

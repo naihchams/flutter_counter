@@ -18,6 +18,7 @@ class HistoryCounterScreen extends StatefulWidget {
 class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
   final TextEditingController _searchController = TextEditingController();
 
+  Color _themeColor = const Color.fromRGBO(117, 93, 236, 1);
   String selectedFilter = 'All';
   String searchQuery = '';
 
@@ -28,7 +29,18 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
   @override
   void initState() {
     super.initState();
+    _loadThemeColor();
     _loadHistory();
+  }
+
+  Future<void> _loadThemeColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _themeColor = Color(
+        prefs.getInt('themeColor') ??
+            const Color.fromRGBO(117, 93, 236, 1).value,
+      );
+    });
   }
 
   Future<void> _loadHistory() async {
@@ -83,6 +95,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
     final height = size.height;
     final horizontalPadding = width * 0.06;
 
+    final theme = Theme.of(context);
     final now = DateTime.now();
     final visibleItems = filteredItems;
 
@@ -123,11 +136,12 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
     final netChange = increments - decrements;
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.07),
         child: AppBar(
           toolbarHeight: 50,
-          backgroundColor: const Color.fromRGBO(117, 93, 236, 1),
+          backgroundColor: _themeColor,
           title: const Text(
             'History',
             style: TextStyle(fontWeight: FontWeight.w500),
@@ -142,7 +156,6 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
           ),
         ),
       ),
-      backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
       body: visibleItems.isEmpty
           ? SafeArea(
               child: Padding(
@@ -159,12 +172,11 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
 
                       const SizedBox(height: 30),
 
-                      const Text(
+                      Text(
                         'No history yet',
-                        style: TextStyle(
+                        style: theme.textTheme.headlineSmall?.copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(30, 30, 40, 1),
                         ),
                       ),
 
@@ -199,22 +211,32 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                                 horizontal: 12,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: theme.cardColor,
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.search, color: Colors.grey),
+                                  Icon(
+                                    Icons.search,
+                                    color: theme.iconTheme.color?.withOpacity(
+                                      0.7,
+                                    ),
+                                  ),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: TextField(
                                       controller: _searchController,
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Search history',
-                                        hintStyle: TextStyle(
-                                          color: Colors.grey,
-                                        ),
+                                        hintStyle: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color: theme
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color
+                                                  ?.withOpacity(0.6),
+                                            ),
                                       ),
                                       onChanged: (text) {
                                         setState(() {
@@ -235,19 +257,19 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                             width: width * 0.25,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
-                              color: const Color.fromRGBO(239, 236, 253, 1),
+                              color: _themeColor.withOpacity(0.18),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: selectedFilter,
                                 isExpanded: true,
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.keyboard_arrow_down,
-                                  color: Color.fromRGBO(110, 91, 217, 1),
+                                  color: _themeColor,
                                 ),
-                                style: const TextStyle(
-                                  color: Color.fromRGBO(110, 91, 217, 1),
+                                style: TextStyle(
+                                  color: _themeColor,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
                                 ),
@@ -326,6 +348,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                       HistoryTotalCard(
                         totalActions: visibleItems.length,
                         currentCount: widget.currentCount,
+                        primaryColor: _themeColor,
                       ),
                     ],
                   ),
