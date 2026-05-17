@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -15,6 +18,74 @@ class _SettingsScreenState extends State<SettingsScreen> {
   int stepValue = 1;
   int defaultValue = 0;
   Color themeColor = const Color.fromRGBO(117, 93, 236, 1);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      allowNegative = prefs.getBool('allowNegative') ?? true;
+      darkMode = prefs.getBool('darkMode') ?? false;
+      stepValue = prefs.getInt('stepValue') ?? 1;
+      defaultValue = prefs.getInt('defaultValue') ?? 0;
+      final colorValue = prefs.getInt('themeColor');
+      if (colorValue != null) {
+        themeColor = Color(colorValue);
+      }
+    });
+  }
+
+  Future<void> _exportHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final historyString = prefs.getString('counter_history');
+
+    if (historyString == null || historyString.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No history to export'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final file = File('${directory.path}/counter_history.txt');
+
+    await file.writeAsString(historyString);
+
+    await Share.shareXFiles([XFile(file.path)], text: 'Counter history export');
+  }
+
+  Future<void> _saveAllowNegative(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('allowNegative', value);
+  }
+
+  Future<void> _saveDarkMode(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('darkMode', value);
+  }
+
+  Future<void> _saveStepValue(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stepValue', value);
+  }
+
+  Future<void> _saveDefaultValue(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('defaultValue', value);
+  }
+
+  Future<void> _saveThemeColor(Color color) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('themeColor', color.value);
+  }
 
   void _showDefaultValueDialog() {
     final controller = TextEditingController(text: defaultValue.toString());
@@ -130,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           final value = int.tryParse(controller.text);
 
                           if (value == null) return;
@@ -139,6 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             defaultValue = value;
                           });
 
+                          await _saveDefaultValue(value);
                           Navigator.pop(context);
                         },
                         child: const Text('Save'),
@@ -191,10 +263,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     final isSelected = color == themeColor;
 
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
                           themeColor = color;
                         });
+                        await _saveThemeColor(color);
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -378,10 +451,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: 'Allow counter to go below zero',
                       trailing: CustomToggle(
                         value: allowNegative,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           setState(() {
                             allowNegative = value;
                           });
+                          await _saveAllowNegative(value);
                         },
                       ),
                     ),
@@ -395,11 +469,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           _SmallButton(
                             icon: Icons.remove,
-                            onTap: () {
+                            onTap: () async {
                               if (stepValue > 1) {
                                 setState(() {
                                   stepValue--;
                                 });
+                                await _saveStepValue(stepValue);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -431,10 +506,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                           _SmallButton(
                             icon: Icons.add,
-                            onTap: () {
+                            onTap: () async {
                               setState(() {
                                 stepValue++;
                               });
+                              await _saveStepValue(stepValue);
                             },
                           ),
                         ],
@@ -498,10 +574,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: 'Use dark theme',
                       trailing: CustomToggle(
                         value: darkMode,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           setState(() {
                             darkMode = value;
                           });
+                          await _saveDarkMode(value);
                         },
                       ),
                     ),
@@ -538,14 +615,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     const SettingsDivider(),
                     GestureDetector(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Export feature coming soon'),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
-                      },
+                      onTap: _exportHistory,
                       child: SettingsTile(
                         icon: Icons.download_rounded,
                         title: 'Export History',
@@ -684,7 +754,7 @@ class SettingsTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          ?trailing,
+          if (trailing != null) trailing!,
         ],
       ),
     );
