@@ -215,7 +215,8 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
 
                     Container(
                       height: height * 0.05,
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      width: width * 0.25,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(239, 236, 253, 1),
                         borderRadius: BorderRadius.circular(15),
@@ -223,19 +224,22 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: selectedFilter,
+                          isExpanded: true,
                           icon: const Icon(
                             Icons.keyboard_arrow_down,
                             color: Color.fromRGBO(110, 91, 217, 1),
                           ),
+                          style: const TextStyle(
+                            color: Color.fromRGBO(110, 91, 217, 1),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
                           items: filters.map((filter) {
-                            return DropdownMenuItem(
+                            return DropdownMenuItem<String>(
                               value: filter,
                               child: Text(
                                 filter,
-                                style: const TextStyle(
-                                  color: Color.fromRGBO(110, 91, 217, 1),
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             );
                           }).toList(),
