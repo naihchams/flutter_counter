@@ -1,16 +1,5 @@
+import 'package:counter_ui_practice/model/history_item.dart';
 import 'package:flutter/material.dart';
-
-class HistoryItem {
-  final String type;
-  final int value;
-  final DateTime createdAt;
-
-  const HistoryItem({
-    required this.type,
-    required this.value,
-    required this.createdAt,
-  });
-}
 
 String _formatTime(DateTime date) {
   final hour = date.hour > 12 ? date.hour - 12 : date.hour;

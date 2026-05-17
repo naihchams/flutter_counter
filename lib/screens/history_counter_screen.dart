@@ -1,7 +1,10 @@
+import 'package:counter_ui_practice/model/history_item.dart';
 import 'package:counter_ui_practice/widgets/history_card_stat.dart';
 import 'package:counter_ui_practice/widgets/history_section.dart';
 import 'package:counter_ui_practice/widgets/history_total_card.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryCounterScreen extends StatefulWidget {
   final int currentCount;
@@ -20,69 +23,33 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
 
   final List<String> filters = ['All', 'Increment', 'Decrement', 'Reset'];
 
-  final List<HistoryItem> allHistoryItems = [
-    // HistoryItem(type: 'increment', value: 16, createdAt: DateTime.now()),
-    // HistoryItem(
-    //   type: 'decrement',
-    //   value: 15,
-    //   createdAt: DateTime.now().subtract(const Duration(minutes: 2)),
-    // ),
-    // HistoryItem(
-    //   type: 'increment',
-    //   value: 16,
-    //   createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
-    // ),
-    // HistoryItem(
-    //   type: 'reset',
-    //   value: 0,
-    //   createdAt: DateTime.now().subtract(const Duration(minutes: 9)),
-    // ),
-    // HistoryItem(
-    //   type: 'increment',
-    //   value: 5,
-    //   createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-    // ),
-    // HistoryItem(
-    //   type: 'decrement',
-    //   value: 4,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-    // ),
-    // HistoryItem(
-    //   type: 'increment',
-    //   value: 5,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
-    // ),
-    // HistoryItem(
-    //   type: 'reset',
-    //   value: 0,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 5)),
-    // ),
-    // HistoryItem(
-    //   type: 'increment',
-    //   value: 20,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 3)),
-    // ),
-    // HistoryItem(
-    //   type: 'decrement',
-    //   value: 19,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 3, hours: 2)),
-    // ),
-    // HistoryItem(
-    //   type: 'reset',
-    //   value: 0,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 12)),
-    // ),
-    // HistoryItem(
-    //   type: 'increment',
-    //   value: 30,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 20)),
-    // ),
-    // HistoryItem(
-    //   type: 'decrement',
-    //   value: 29,
-    //   createdAt: DateTime.now().subtract(const Duration(days: 35)),
-    // ),
-  ];
+  List<HistoryItem> allHistoryItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final historyString = prefs.getString('counter_history');
+
+    if (historyString == null) return;
+
+    final decoded = jsonDecode(historyString);
+
+    setState(() {
+      allHistoryItems = decoded.map<HistoryItem>((item) {
+        return HistoryItem(
+          type: item['type'],
+          value: item['value'],
+          createdAt: DateTime.parse(item['createdAt']),
+        );
+      }).toList();
+    });
+  }
 
   @override
   void dispose() {
