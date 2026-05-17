@@ -1,4 +1,5 @@
 import 'package:counter_ui_practice/widgets/counter_circle.dart';
+import 'package:counter_ui_practice/widgets/counter_header.dart';
 import 'package:counter_ui_practice/widgets/tip_card.dart';
 import 'package:counter_ui_practice/widgets/welcome_section.dart';
 import 'package:flutter/material.dart';
@@ -57,34 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 75,
-        backgroundColor: Color.fromRGBO(117, 93, 236, 1),
-        title: Text(
-          widget.title,
-          style: TextStyle(fontWeight: FontWeight.w500),
-        ),
-        foregroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-        ),
-        leading: GestureDetector(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/images/restore.svg',
-              semanticsLabel: 'Restore',
-              color: Colors.white,
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.settings_outlined, size: 25),
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CounterHeader(title: widget.title),
       ),
       backgroundColor: Color.fromRGBO(248, 246, 253, 1),
       body: SafeArea(
