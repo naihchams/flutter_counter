@@ -4,8 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CounterHeader extends StatelessWidget {
   final String title;
-
-  const CounterHeader({super.key, required this.title});
+  final int count;
+  const CounterHeader({super.key, required this.title, required this.count});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CounterHeader extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const HistoryCounterScreen(),
+              builder: (context) => HistoryCounterScreen(currentCount: count),
             ),
           );
         },

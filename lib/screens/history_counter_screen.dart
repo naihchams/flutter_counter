@@ -4,7 +4,9 @@ import 'package:counter_ui_practice/widgets/history_total_card.dart';
 import 'package:flutter/material.dart';
 
 class HistoryCounterScreen extends StatefulWidget {
-  const HistoryCounterScreen({super.key});
+  final int currentCount;
+
+  const HistoryCounterScreen({super.key, required this.currentCount});
 
   @override
   State<HistoryCounterScreen> createState() => _HistoryCounterScreenState();
@@ -144,10 +146,13 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
     final increments = visibleItems
         .where((item) => item.type == 'increment')
         .length;
+
     final decrements = visibleItems
         .where((item) => item.type == 'decrement')
         .length;
+
     final resets = visibleItems.where((item) => item.type == 'reset').length;
+
     final netChange = increments - decrements;
 
     return Scaffold(
@@ -299,9 +304,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
 
                 HistoryTotalCard(
                   totalActions: visibleItems.length,
-                  currentCount: visibleItems.isEmpty
-                      ? 0
-                      : visibleItems.first.value,
+                  currentCount: widget.currentCount,
                 ),
               ],
             ),

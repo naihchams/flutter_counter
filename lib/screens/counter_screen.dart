@@ -77,7 +77,7 @@ class _CounterScreenState extends State<CounterScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.09),
-        child: const CounterHeader(title: 'Counter App'),
+        child: CounterHeader(title: 'Counter App', count: _counter),
       ),
       backgroundColor: const Color.fromRGBO(248, 246, 253, 1),
       body: SafeArea(
