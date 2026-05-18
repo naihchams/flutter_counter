@@ -44,7 +44,7 @@ class _CounterScreenState extends State<CounterScreen> {
       _defaultValue = prefs.getInt('defaultValue') ?? 0;
       _themeColor = Color(
         prefs.getInt('themeColor') ??
-            const Color.fromRGBO(117, 93, 236, 1).value,
+            const Color.fromRGBO(117, 93, 236, 1).toARGB32(),
       );
     });
   }

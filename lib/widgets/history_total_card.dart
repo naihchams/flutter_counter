@@ -17,11 +17,11 @@ class HistoryTotalCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
       decoration: BoxDecoration(
-        color: primaryColor.withOpacity(0.14),
+        color: primaryColor.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
@@ -33,7 +33,7 @@ class HistoryTotalCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.22),
+              color: primaryColor.withValues(alpha: 0.22),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(Icons.bar_chart_rounded, color: primaryColor, size: 30),
@@ -117,7 +117,7 @@ class _CenterDivider extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            primaryColor.withOpacity(0.6),
+            primaryColor.withValues(alpha: 0.6),
             Colors.transparent,
           ],
         ),

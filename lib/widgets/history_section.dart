@@ -46,8 +46,8 @@ class HistorySection extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: isDark
-                    ? Colors.white.withOpacity(0.03)
-                    : Colors.black.withOpacity(0.04),
+                    ? Colors.white.withValues(alpha: 0.03)
+                    : Colors.black.withValues(alpha: 0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 6),
               ),
@@ -96,7 +96,7 @@ class HistoryTile extends StatelessWidget {
             height: 38,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: style.color.withOpacity(0.92),
+              color: style.color.withValues(alpha: 0.92),
             ),
             child: Icon(style.icon, color: Colors.white, size: 24),
           ),

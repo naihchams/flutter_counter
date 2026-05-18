@@ -21,7 +21,7 @@ class WelcomeSection extends StatelessWidget {
         Text(
           'Simple counter to increase, decrease, and reset',
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.75),
           ),
         ),
       ],

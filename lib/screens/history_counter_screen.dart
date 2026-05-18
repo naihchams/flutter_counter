@@ -38,7 +38,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
     setState(() {
       _themeColor = Color(
         prefs.getInt('themeColor') ??
-            const Color.fromRGBO(117, 93, 236, 1).value,
+            const Color.fromRGBO(117, 93, 236, 1).toARGB32(),
       );
     });
   }
@@ -218,8 +218,8 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                                 children: [
                                   Icon(
                                     Icons.search,
-                                    color: theme.iconTheme.color?.withOpacity(
-                                      0.7,
+                                    color: theme.iconTheme.color?.withValues(
+                                      alpha: 0.7,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -235,7 +235,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                                                   .textTheme
                                                   .bodyMedium
                                                   ?.color
-                                                  ?.withOpacity(0.6),
+                                                  ?.withValues(alpha: 0.6),
                                             ),
                                       ),
                                       onChanged: (text) {
@@ -257,7 +257,7 @@ class _HistoryCounterScreenState extends State<HistoryCounterScreen> {
                             width: width * 0.25,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
-                              color: _themeColor.withOpacity(0.18),
+                              color: _themeColor.withValues(alpha: 0.18),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: DropdownButtonHideUnderline(

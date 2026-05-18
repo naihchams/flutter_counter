@@ -24,7 +24,7 @@ class TipCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.12),
+            color: theme.shadowColor.withValues(alpha: 0.12),
             spreadRadius: 2,
             blurRadius: 20,
             offset: const Offset(0, 0),
@@ -42,7 +42,7 @@ class TipCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               shape: BoxShape.rectangle,
-              color: primaryColor.withOpacity(0.16),
+              color: primaryColor.withValues(alpha: 0.16),
             ),
             child: Icon(Icons.lightbulb_outline, color: primaryColor),
           ),

@@ -21,11 +21,9 @@ class CounterActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
-    final height = size.height;
 
     final normalButtonSize = width * 0.18;
     final centerButtonSize = width * 0.22;
-    final spacing = width * 0.06;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +38,7 @@ class CounterActions extends StatelessWidget {
           iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: false,
-          backgroundColor: primaryColor.withOpacity(0.18),
+          backgroundColor: primaryColor.withValues(alpha: 0.18),
           iconColor: primaryColor,
           textColor: Colors.blueGrey,
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -69,7 +67,7 @@ class CounterActions extends StatelessWidget {
           iconSize: normalButtonSize * 0.5,
           isCircle: false,
           isReset: true,
-          backgroundColor: primaryColor.withOpacity(0.18),
+          backgroundColor: primaryColor.withValues(alpha: 0.18),
           iconColor: primaryColor,
           textColor: Colors.blueGrey,
           borderRadius: BorderRadius.all(Radius.circular(16)),

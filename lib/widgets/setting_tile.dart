@@ -56,7 +56,7 @@ class SettingsTile extends StatelessWidget {
                     fontSize: 13,
                     color: Theme.of(
                       context,
-                    ).textTheme.bodySmall?.color?.withOpacity(0.7),
+                    ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
                   ),
                 ),
               ],

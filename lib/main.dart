@@ -68,9 +68,11 @@ class _MyAppState extends State<MyApp> {
       canvasColor: brightness == Brightness.light
           ? const Color(0xFFF6F4FD)
           : const Color(0xFF121212),
-      dialogBackgroundColor: brightness == Brightness.light
-          ? Colors.white
-          : const Color(0xFF1E1E1E),
+      dialogTheme: DialogThemeData(
+        backgroundColor: brightness == Brightness.light
+            ? Colors.white
+            : const Color(0xFF1E1E1E),
+      ),
       textTheme: ThemeData(brightness: brightness).textTheme.apply(
         bodyColor: brightness == Brightness.light
             ? Colors.black87

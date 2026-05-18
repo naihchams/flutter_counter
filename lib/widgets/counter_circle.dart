@@ -36,7 +36,7 @@ class CounterCircle extends StatelessWidget {
               width: outerCircleSize,
               height: outerCircleSize,
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(isDark ? 0.12 : 0.16),
+                color: primaryColor.withValues(alpha: isDark ? 0.12 : 0.16),
                 shape: BoxShape.circle,
               ),
             ),
@@ -64,14 +64,14 @@ class CounterCircle extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: isDark
                                 ? [
-                                    primaryColor.withOpacity(0.0),
-                                    primaryColor.withOpacity(0.12),
-                                    primaryColor.withOpacity(0.0),
+                                    primaryColor.withValues(alpha: 0.0),
+                                    primaryColor.withValues(alpha: 0.12),
+                                    primaryColor.withValues(alpha: 0.0),
                                   ]
                                 : [
-                                    Colors.white.withOpacity(0.0),
-                                    Colors.white.withOpacity(0.60),
-                                    Colors.white.withOpacity(0.0),
+                                    Colors.white.withValues(alpha: 0.0),
+                                    Colors.white.withValues(alpha: 0.60),
+                                    Colors.white.withValues(alpha: 0.0),
                                   ],
                           ),
                         ),
@@ -91,7 +91,9 @@ class CounterCircle extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.12),
+                    color: Theme.of(
+                      context,
+                    ).shadowColor.withValues(alpha: 0.12),
                     spreadRadius: 2,
                     blurRadius: 20,
                     offset: const Offset(0, 0),
@@ -143,11 +145,11 @@ class CounterCircle extends StatelessWidget {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Colors.white.withOpacity(0.0),
+                                    Colors.white.withValues(alpha: 0.0),
                                     (isDark
-                                        ? primaryColor.withOpacity(0.18)
-                                        : Colors.white.withOpacity(0.45)),
-                                    Colors.white.withOpacity(0.0),
+                                        ? primaryColor.withValues(alpha: 0.18)
+                                        : Colors.white.withValues(alpha: 0.45)),
+                                    Colors.white.withValues(alpha: 0.0),
                                   ],
                                 ),
                               ),

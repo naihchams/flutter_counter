@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:counter_ui_practice/widgets/custom_toggle.dart';
 import 'package:counter_ui_practice/widgets/setting_section.dart';
 import 'package:counter_ui_practice/widgets/setting_tile.dart';
@@ -66,8 +68,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final file = File('${directory.path}/counter_history.txt');
 
     await file.writeAsString(historyString);
-
-    await Share.shareXFiles([XFile(file.path)], text: 'Counter history export');
+    // Use the SharePlus instance and wrap parameters in ShareParams
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(file.path)], text: 'Counter history export'),
+    );
   }
 
   Future<void> _saveAllowNegative(bool value) async {
@@ -92,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _saveThemeColor(Color color) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('themeColor', color.value);
+    await prefs.setInt('themeColor', color.toARGB32());
   }
 
   void _showDefaultValueDialog() {
@@ -111,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(26),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withOpacity(0.08),
+                  color: theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -124,7 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 54,
                   height: 54,
                   decoration: BoxDecoration(
-                    color: themeColor.withOpacity(0.16),
+                    color: themeColor.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
@@ -150,7 +154,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   'Set the starting value for your counter.',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(
+                      alpha: 0.75,
+                    ),
                     fontSize: 14,
                   ),
                 ),
@@ -171,8 +177,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     fillColor: theme.cardColor,
                     hintText: '0',
                     hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color?.withOpacity(
-                        0.6,
+                      color: theme.textTheme.bodyMedium?.color?.withValues(
+                        alpha: 0.6,
                       ),
                     ),
                     border: OutlineInputBorder(
@@ -262,7 +268,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(26),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withOpacity(0.08),
+                  color: theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -341,7 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(26),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withOpacity(0.08),
+                  color: theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
@@ -354,7 +360,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 58,
                   height: 58,
                   decoration: BoxDecoration(
-                    color: themeColor.withOpacity(0.16),
+                    color: themeColor.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Icon(
@@ -379,7 +385,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   'This will permanently remove all counter history.',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(
+                      alpha: 0.75,
+                    ),
                     fontSize: 14,
                     height: 1.4,
                   ),
@@ -482,7 +490,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsTile(
                       icon: Icons.exposure_minus_1,
                       iconColor: themeColor,
-                      iconBackgroundColor: themeColor.withOpacity(0.16),
+                      iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                       title: 'Allow Negative Numbers',
                       subtitle: 'Allow counter to go below zero',
                       trailing: CustomToggle(
@@ -501,7 +509,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsTile(
                       icon: Icons.stairs_rounded,
                       iconColor: themeColor,
-                      iconBackgroundColor: themeColor.withOpacity(0.16),
+                      iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                       title: 'Step Value',
                       subtitle: 'Amount to change on each tap',
                       trailing: Row(
@@ -566,7 +574,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: SettingsTile(
                         icon: Icons.refresh_rounded,
                         iconColor: themeColor,
-                        iconBackgroundColor: themeColor.withOpacity(0.16),
+                        iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                         title: 'Default Value',
                         subtitle: 'Set initial value for the counter',
                         trailing: Row(
@@ -599,7 +607,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: SettingsTile(
                         icon: Icons.palette_outlined,
                         iconColor: themeColor,
-                        iconBackgroundColor: themeColor.withOpacity(0.16),
+                        iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                         title: 'Theme Color',
                         subtitle: 'Choose your preferred color theme',
                         trailing: Row(
@@ -619,7 +627,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsTile(
                       icon: Icons.dark_mode_outlined,
                       iconColor: themeColor,
-                      iconBackgroundColor: themeColor.withOpacity(0.16),
+                      iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                       title: 'Dark Mode',
                       subtitle: 'Use dark theme',
                       trailing: CustomToggle(
@@ -648,7 +656,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: SettingsTile(
                         icon: Icons.history,
                         iconColor: themeColor,
-                        iconBackgroundColor: themeColor.withOpacity(0.16),
+                        iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                         title: 'Clear History',
                         subtitle: 'Remove all counter history',
                         trailing: Row(
@@ -656,7 +664,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             CircleAvatar(
                               radius: 20,
-                              backgroundColor: themeColor.withOpacity(0.16),
+                              backgroundColor: themeColor.withValues(
+                                alpha: 0.16,
+                              ),
                               child: Icon(
                                 Icons.delete_outline,
                                 color: themeColor,
@@ -665,7 +675,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             const SizedBox(width: 10),
                             Icon(
                               Icons.chevron_right,
-                              color: themeColor.withOpacity(0.75),
+                              color: themeColor.withValues(alpha: 0.75),
                             ),
                           ],
                         ),
@@ -677,12 +687,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: SettingsTile(
                         icon: Icons.download_rounded,
                         iconColor: themeColor,
-                        iconBackgroundColor: themeColor.withOpacity(0.16),
+                        iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                         title: 'Export History',
                         subtitle: 'Save your history as a file',
                         trailing: Icon(
                           Icons.chevron_right,
-                          color: themeColor.withOpacity(0.75),
+                          color: themeColor.withValues(alpha: 0.75),
                         ),
                       ),
                     ),
@@ -697,7 +707,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsTile(
                       icon: Icons.info_outline,
                       iconColor: themeColor,
-                      iconBackgroundColor: themeColor.withOpacity(0.16),
+                      iconBackgroundColor: themeColor.withValues(alpha: 0.16),
                       title: 'About Counter App',
                       subtitle: 'Version 1.0.0',
                     ),
@@ -732,7 +742,7 @@ class _SmallButton extends StatelessWidget {
         width: 44,
         height: 40,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.16),
+          color: color.withValues(alpha: 0.16),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, color: color),
