@@ -143,11 +143,11 @@ class CounterCircle extends StatelessWidget {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    primaryColor.withOpacity(0.0),
-                                    primaryColor.withOpacity(
-                                      isDark ? 0.18 : 0.45,
-                                    ),
-                                    primaryColor.withOpacity(0.0),
+                                    Colors.white.withOpacity(0.0),
+                                    (isDark
+                                        ? primaryColor.withOpacity(0.18)
+                                        : Colors.white.withOpacity(0.45)),
+                                    Colors.white.withOpacity(0.0),
                                   ],
                                 ),
                               ),
